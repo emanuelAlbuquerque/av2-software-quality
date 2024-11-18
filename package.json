@@ -1,0 +1,45 @@
+{
+  "name": "av2-software-quality",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "docker:up": "docker-compose up -d",
+    "migration:generate": "typeorm-ts-node-commonjs -d ./src/adapters/secondary/external/database/postgress/data-source.ts migration:generate ./src/adapters/secondary/external/database/postgress/migrations/default",
+    "migration:run": "typeorm-ts-node-commonjs -d ./src/adapters/secondary/external/database/postgress/data-source.ts migration:run",
+    "migration:up": "npm run migration:generate && npm run migration:run",
+    "start:up": "ts-node-dev --respawn src/main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/luxon": "^3.4.2",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.8.1",
+    "@types/pg": "^8.11.10",
+    "@types/uuid": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@types/yup": "^0.29.14",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "luxon": "^3.5.0",
+    "minio": "^8.0.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20",
+    "uuid": "^10.0.0",
+    "yup": "^1.4.0"
+  }
+}
