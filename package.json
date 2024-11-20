@@ -6,10 +6,10 @@
   "scripts": {
     "build": "tsc",
     "docker:up": "docker-compose up -d",
-    "migration:generate": "typeorm-ts-node-commonjs -d ./src/adapters/secondary/external/database/postgress/data-source.ts migration:generate ./src/adapters/secondary/external/database/postgress/migrations/default",
-    "migration:run": "typeorm-ts-node-commonjs -d ./src/adapters/secondary/external/database/postgress/data-source.ts migration:run",
+    "migration:generate": "typeorm-ts-node-commonjs -d ./src/main/adapters/secondary/external/database/postgress/data-source.ts migration:generate ./src/main/adapters/secondary/external/database/postgress/migrations/default",
+    "migration:run": "typeorm-ts-node-commonjs -d ./src/main/adapters/secondary/external/database/postgress/data-source.ts migration:run",
     "migration:up": "npm run migration:generate && npm run migration:run",
-    "start:up": "ts-node-dev --respawn src/main.ts"
+    "start:up": "ts-node-dev --respawn src/main/main.ts"
   },
   "keywords": [],
   "author": "",

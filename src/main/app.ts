@@ -1,8 +1,8 @@
 import express, { Application } from 'express'
-import { Routes } from './adapters/primary/router'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import morgan from 'morgan'
+import { Routes } from './adapters/primary/router'
 
 const PORT = process.env.PORT || '3500'
 
