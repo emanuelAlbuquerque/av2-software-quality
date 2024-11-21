@@ -2,6 +2,7 @@ import { UserEntity } from "../../../../domain/core/entity/user"
 import { CreateUserUseCaseRepositoryInterface, SingInUseCaseRepositoryInterface } from "../../../../domain/usecase/port/repository/user"
 import { hashPassword, verifyPassword } from "../../external/bcrypt/encode"
 import { getUserByEmail, insertUser } from "../../external/database/postgress/user"
+import { encodeToken } from "../../external/jsonwebtoken/token"
 
 class CreateUserUseCaseRepository implements CreateUserUseCaseRepositoryInterface {
     async hashPassword(password: string): Promise<string> {
@@ -20,6 +21,10 @@ class SingInUseCaseRepository implements SingInUseCaseRepositoryInterface {
 
     async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
         return await verifyPassword(plainPassword, hashedPassword)
+    }
+    
+    encodeToken(data: any, expiresIn: string): string | null {
+        return encodeToken(data, expiresIn)
     }
 }
 

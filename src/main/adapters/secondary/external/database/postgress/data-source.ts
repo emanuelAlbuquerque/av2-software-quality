@@ -10,7 +10,6 @@ const PATH_FILES_MIGRATIONS = path.join(__dirname, 'migrations/*.{ts,js}')
 export const AppDataSource = new DataSource({
     type: 'postgres',
     synchronize: false,
-    logging: true,
     url: process.env.DATABASE_URL,
     entities: [PATH_FILES],
     migrations: [PATH_FILES_MIGRATIONS]

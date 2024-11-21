@@ -8,6 +8,7 @@ interface CreateUserUseCaseRepositoryInterface {
 interface SingInUseCaseRepositoryInterface {
     getUserByEmail(email: string): Promise<UserEntity | null>
     verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean>
+    encodeToken(data: any, expiresIn: string): string | null
 }
 
 export {

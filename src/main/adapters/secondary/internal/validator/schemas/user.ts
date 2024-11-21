@@ -1,8 +1,8 @@
 import { object, string } from "yup"
 import { getUserByEmail } from "../../../external/database/postgress/user"
-import { CreateUserUseCaseDTOInput } from "../../../../../domain/usecase/dto/user"
+import { CreateUserUseCaseDTOInput, SingInUseCaseDTOInput } from "../../../../../domain/usecase/dto/user"
 
-async function getUserValidatorSchema(input: CreateUserUseCaseDTOInput | null) {
+async function createUserValidatorSchema(input: CreateUserUseCaseDTOInput | null) {
     return object().shape({
         name: string().required('O nome é obrigatório.').max(255, 'O Nome ultrapassou o limite de caracteres.'),
         email: string()
@@ -18,8 +18,7 @@ async function getUserValidatorSchema(input: CreateUserUseCaseDTOInput | null) {
             })
             .email('Insira um e-mail válido.')
             .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, 'Insira um e-mail válido.')
-            .max(255, 'O E-mail ultrapassou o limite de caracteres.')
-        ,
+            .max(255, 'O E-mail ultrapassou o limite de caracteres.'),
         password: string()
             .min(8, 'A senha precisa ter pelo menos 8 caracteres.')
             .matches(/\d/, 'A senha deve incluir pelo menos um número.')
@@ -27,6 +26,17 @@ async function getUserValidatorSchema(input: CreateUserUseCaseDTOInput | null) {
     })
 }
 
+async function singInUserValidatorSchema(input: SingInUseCaseDTOInput | null) {
+    return object().shape({
+        email: string()
+            .email('Insira um e-mail válido.')
+            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, 'Insira um e-mail válido.')
+            .max(255, 'O E-mail ultrapassou o limite de caracteres.'),
+        password: string().required('A senha é obrigatória.')
+    })
+}
+
 export {
-    getUserValidatorSchema
+    createUserValidatorSchema,
+    singInUserValidatorSchema
 }

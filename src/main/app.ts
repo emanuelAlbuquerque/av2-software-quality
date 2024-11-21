@@ -23,10 +23,17 @@ class AppServer {
     dotenv.config()
   }
 
-  public start(): void {
-    this.app.listen(PORT, () => {
-      console.log(`Server is running in port: ${PORT}`)
-    })
+  public getApp(): Application {
+    return this.app
+  }
+
+  public async start(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.app.listen(PORT, () => {
+        console.log(`Server is running in port: ${PORT}`);
+        resolve()
+      }).on('error', reject)
+    });
   }
 }
 

@@ -1,4 +1,4 @@
-import { UserEntity } from "../../core/entity/user";
+import { UserEntity, UserResponseEntity } from "../../core/entity/user";
 import { ErrorEntity } from "./error";
 
 class CreateUserUseCaseDTOInput {
@@ -23,8 +23,16 @@ class SingInUseCaseDTOInput {
     ) { }
 }
 
+class SingInUseCaseDTOOutput {
+    constructor(
+        public token: string | null,
+        public error: ErrorEntity | null,
+    ) { }
+}
+
 export {
     CreateUserUseCaseDTOInput,
     CreateUserUseCaseDTOOutput,
-    SingInUseCaseDTOInput
+    SingInUseCaseDTOInput,
+    SingInUseCaseDTOOutput
 }

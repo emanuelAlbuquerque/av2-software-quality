@@ -1,10 +1,10 @@
 import { CreateUserUseCaseDTOInput, SingInUseCaseDTOInput } from "../../../../domain/usecase/dto/user"
 import { Validator } from "../../../../domain/usecase/port/validator"
-import { getUserValidatorSchema } from "./schemas/user"
+import { createUserValidatorSchema, singInUserValidatorSchema } from "./schemas/user"
 
 class CreateUserUseCaseValidator implements Validator<CreateUserUseCaseDTOInput> {
     async execute(input: CreateUserUseCaseDTOInput): Promise<string | null> {
-        const userSchema = await getUserValidatorSchema(input)
+        const userSchema = await createUserValidatorSchema(input)
 
         try {
             await userSchema.validate(input, { abortEarly: false })
@@ -21,23 +21,20 @@ class CreateUserUseCaseValidator implements Validator<CreateUserUseCaseDTOInput>
 }
 
 class SingInUseCaseValidator implements Validator<SingInUseCaseDTOInput> {
-    execute(input: SingInUseCaseDTOInput): string | null {
-        const errors: string[] = []
-        let error: string | null = null
+    async execute(input: SingInUseCaseDTOInput): Promise<string | null> {
+        const userSchema = await singInUserValidatorSchema(input)
 
-        if (!input.password) {
-            errors.push('A senha não pode ser vazia.')
+        try {
+            await userSchema.validate(input, { abortEarly: false })
+
+            return null
+        } catch (validationError: any) {
+            if (validationError.errors) {
+                return validationError.errors.join(' ')
+            }
+
+            return validationError.message || 'Erro desconhecido'
         }
-
-        if (!input.email) {
-            errors.push('O e-mail é obrigatório.')
-        }
-
-        if (errors.length > 0) {
-            error = errors.join(',')
-        }
-
-        return error
     }
 }
 

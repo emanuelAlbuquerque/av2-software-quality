@@ -1,8 +1,8 @@
 import { GeneralDateLib } from "../../adapters/secondary/internal/libs/date"
 import { GeneralUUIDLib } from "../../adapters/secondary/internal/libs/uuid"
 import { UserEntity, UserResponseEntity } from "../core/entity/user"
-import { ValidationErrorEntity } from "./dto/error"
-import { CreateUserUseCaseDTOInput, CreateUserUseCaseDTOOutput, SingInUseCaseDTOInput } from "./dto/user"
+import { InternalErrorEntity, ValidationErrorEntity } from "./dto/error"
+import { CreateUserUseCaseDTOInput, CreateUserUseCaseDTOOutput, SingInUseCaseDTOInput, SingInUseCaseDTOOutput } from "./dto/user"
 import { CreateUserUseCaseRepositoryInterface, SingInUseCaseRepositoryInterface } from "./port/repository/user"
 import { Validator } from "./port/validator"
 
@@ -18,22 +18,22 @@ class CreateUserUseCase {
         try {
             const error = await this.validator.execute(input)
 
-            if(error) {
+            if (error) {
                 return new CreateUserUseCaseDTOOutput(null, new ValidationErrorEntity(error))
             }
 
             const user = await this.createUser(input)
-            
+
             return new CreateUserUseCaseDTOOutput(user, null)
         } catch (error: any) {
             console.log(error)
-            return new CreateUserUseCaseDTOOutput(null, error.message)
+            return new CreateUserUseCaseDTOOutput(null, new InternalErrorEntity(error.message))
         }
     }
-    
+
     private async createUser(input: CreateUserUseCaseDTOInput): Promise<UserEntity | null> {
         const hashPassword = await this.repository.hashPassword(input.password)
-    
+
         const user = new UserEntity(
             this.generalUUID.generateUUId(),
             input.name,
@@ -42,9 +42,9 @@ class CreateUserUseCase {
             this.generalDate.generateDate(),
             this.generalDate.generateDate()
         )
-    
+
         const userCreated = await this.repository.intert(user)
-        
+
         return userCreated
     }
 }
@@ -55,9 +55,13 @@ class SingInUseCase {
         private validator: Validator<SingInUseCaseDTOInput>,
     ) { }
 
-    public async execute(input: SingInUseCaseDTOInput): Promise<UserResponseEntity | null> {
+    public async execute(input: SingInUseCaseDTOInput): Promise<SingInUseCaseDTOOutput> {
         try {
-            await this.validator.execute(input)
+            const error = await this.validator.execute(input)
+
+            if (error) {
+                return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity(error))
+            }
 
             const user = await this.repository.getUserByEmail(input.email)
 
@@ -65,16 +69,24 @@ class SingInUseCase {
                 const verifyPassword = await this.repository.verifyPassword(input.password, user.password)
 
                 if (verifyPassword) {
-                    return new UserResponseEntity(user.userId, user.name, user.email)
+                    const userResponse = new UserResponseEntity(user.userId, user.name, user.email)
+
+                    const token = this.repository.encodeToken({ user: userResponse }, '24h')
+
+                    if (token) {
+                        return new SingInUseCaseDTOOutput(token, null)
+                    }
+
+                    return new SingInUseCaseDTOOutput(null, new InternalErrorEntity('Error generate access token.'))
                 } else {
-                    throw new Error('Credênciais Inválida')
+                    return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity('Credênciais Inválida'))
                 }
             } else {
-                throw new Error('Credênciais Inválida')
+                return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity('Credênciais Inválida'))
             }
         } catch (error: any) {
             console.log(error)
-            throw error
+            return new SingInUseCaseDTOOutput(null, new InternalErrorEntity(error.message))
         }
     }
 }
