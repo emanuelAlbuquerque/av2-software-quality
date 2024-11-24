@@ -1,19 +1,20 @@
 class ErrorEntity {
     constructor(
         public code: string,
-        public message: string
+        public message: string,
+        public statusCode: number
     ) { }
 }
 
 class ValidationErrorEntity extends ErrorEntity {
     constructor(message: string) {
-        super('validation', message)
+        super('validation', message, 422)
     }
 }
 
 class InternalErrorEntity extends ErrorEntity {
     constructor(message: string) {
-        super('internal', message)
+        super('internal', `Erro Interno do Servidor - ${message}`, 500)
     }
 }
 

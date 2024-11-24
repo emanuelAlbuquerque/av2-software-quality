@@ -79,10 +79,10 @@ class SingInUseCase {
 
                     return new SingInUseCaseDTOOutput(null, new InternalErrorEntity('Error generate access token.'))
                 } else {
-                    return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity('Credênciais Inválida'))
+                    return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity('Credenciais inválidas.'))
                 }
             } else {
-                return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity('Credênciais Inválida'))
+                return new SingInUseCaseDTOOutput(null, new ValidationErrorEntity('Credenciais inválidas.'))
             }
         } catch (error: any) {
             console.log(error)

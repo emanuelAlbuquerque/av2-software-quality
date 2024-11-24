@@ -28,6 +28,12 @@ class CreateUserController {
         const input = new CreateUserUseCaseDTOInput(name, email, password)
         const response = await this.createUserUseCase.execute(input)
 
+        if(response.error) {
+            res.status(response.error.statusCode).json(response)
+
+            return
+        }
+
         res.status(201).json(response)
     }
 }
@@ -49,6 +55,12 @@ class SingInController {
 
         const input = new SingInUseCaseDTOInput(email, password)
         const response = await this.signInUseCase.execute(input)
+
+        if(response.error) {
+            res.status(response.error.statusCode).json(response)
+
+            return
+        }
 
         res.status(201).json(response)
     }

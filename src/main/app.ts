@@ -27,7 +27,9 @@ class AppServer {
     return this.app
   }
 
-  public async start(): Promise<void> {
+  public async start(nodeEnv: string): Promise<void> {
+    process.env["NODE_ENV"] = nodeEnv
+
     return new Promise((resolve, reject) => {
       this.app.listen(PORT, () => {
         console.log(`Server is running in port: ${PORT}`);

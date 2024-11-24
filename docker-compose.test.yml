@@ -1,20 +1,17 @@
 version: '3.8'
 
 services:
-  postgres_prod:
+  postgres_test:
     image: postgres:13
-    container_name: av2-software-quality-db-prod
+    container_name: av2-software-quality-db-test
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: av2-software-quality
+      POSTGRES_DB: av2-software-quality-test
     ports:
-      - "5434:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - "5433:5432"
     networks:
       - db_network
-
 networks:
   db_network:
     driver: bridge

@@ -1,5 +1,5 @@
 import { AppServer } from './app'
 
 (() => {
-  new AppServer().start()
+  new AppServer().start("production")
 })()
