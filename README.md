@@ -152,9 +152,9 @@ Aqui estão os principais comandos que podem ser usados para executar o projeto:
 {
   "user": null,
   "error": {
-    "code": "validation" | "internal",
+    "code": "validation | internal",
     "message": "string",
-    "statusCode": 422 | 500
+    "statusCode": "422 | 500"
   }
 }
 ```
@@ -184,9 +184,9 @@ Aqui estão os principais comandos que podem ser usados para executar o projeto:
 {
   "token": null,
   "error": {
-    "code": "validation" | "internal",
+    "code": "validation | internal",
     "message": "string",
-    "statusCode": 422 | 500
+    "statusCode": "422 | 500"
   }
 }
 ```
