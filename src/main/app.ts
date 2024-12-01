@@ -8,6 +8,7 @@ const PORT = process.env.PORT || '3500'
 
 class AppServer {
   private app: Application
+  private server: any
 
   constructor() {
     this.app = express()
@@ -27,11 +28,25 @@ class AppServer {
     return this.app
   }
 
+  public async stop(): Promise<void> {
+    if (this.server) {
+      return new Promise((resolve, reject) => {
+        this.server.close((err: Error) => {
+          if (err) return reject(err);
+          console.log('Server has been stopped.');
+          resolve();
+        });
+      });
+    } else {
+      console.warn('Server is not running.');
+    }
+  }
+
   public async start(nodeEnv: string): Promise<void> {
     process.env["NODE_ENV"] = nodeEnv
 
     return new Promise((resolve, reject) => {
-      this.app.listen(PORT, () => {
+      this.server = this.app.listen(PORT, () => {
         console.log(`Server is running in port: ${PORT}`);
         resolve()
       }).on('error', reject)
